@@ -1,16 +1,10 @@
 const functions = require("firebase-functions");
-
+// express読みこみ
 const express = require("express");
-
-const requestPromise = require("request-promise-native"); // 追加
-
-const cors = require("cors"); // 追加
-
-
+const requestPromise = require("request-promise-native");
+const cors = require("cors");
 const app = express();
 
-
-// APIにリクエストを送る関数を定義
 const getDataFromApi = async (keyword) => {
     // cloud functionsから実行する場合には地域の設定が必要になるため，`country=JP`を追加している
     const requestUrl =
@@ -18,13 +12,11 @@ const getDataFromApi = async (keyword) => {
     const result = await requestPromise(`${requestUrl}${keyword}`);
     return result;
   };
-  
+
 app.get("/hello", (req, res) => {
-  // レスポンスの設定
   res.send("Hello Express!");
 });
 
-// ↓↓↓ エンドポイントを追加 ↓↓↓
 app.get("/user/:userId", (req, res) => {
     const users = [
       { id: 1, name: "ジョナサン" },
@@ -40,10 +32,7 @@ app.get("/user/:userId", (req, res) => {
     res.send(targetUser);
   });
 
-// エンドポイント追加
-// ここに`cors()`を追加
-app.get("/gbooks/:keyword", cors(), async (req, res) => {
-    // APIリクエストの関数を実行
+  app.get("/gbooks/:keyword", cors(), async (req, res) => {
     const response = await getDataFromApi(req.params.keyword);
     res.send(response);
 });
@@ -51,8 +40,17 @@ app.get("/gbooks/:keyword", cors(), async (req, res) => {
 // 出力
 const api = functions.https.onRequest(app);
 module.exports = { api };
+// http://localhost:5000/node-50090/us-central1/helloWorld
+// local
+// http://localhost:5000/node-50090/us-central1/helloWorld
+// http://localhost:5000/node-50090/us-central1/api
+// firebase
+// http://localhost:5000/node-50090/us-central1/helloWorld
 
+// // Create and Deploy Your First Cloud Functions
+// // https://firebase.google.com/docs/functions/write-firebase-functions
+//
 // exports.helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
+//   functions.logger.info("Hello logs!", { structuredData: true });
 //   response.send("Hello from Firebase!");
 // });
