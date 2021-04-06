@@ -1,24 +1,14 @@
 const functions = require("firebase-functions");
 
-// Expressの読み込み
 const express = require("express");
 
 const requestPromise = require("request-promise-native"); // 追加
 
 const cors = require("cors"); // 追加
 
-// local
-// http://localhost:5000/nodefunc-a1196/us-central1/helloWorld
-// deploy
-// https://us-central1-nodefunc-a1196.cloudfunctions.net/helloWorld
-
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
 
 const app = express();
 
-// app.use(cors()); // 追加 // 一旦コメントアウト
 
 // APIにリクエストを送る関数を定義
 const getDataFromApi = async (keyword) => {
